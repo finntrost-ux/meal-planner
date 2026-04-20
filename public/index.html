@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weekly Meal Planner</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">🥗</span>
+        <div>
+          <div class="logo-title">Meal Planner</div>
+          <div class="logo-sub">Powered by Trost AI</div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <span id="save-indicator" class="save-indicator hidden">Preferences saved ✓</span>
+        <button class="btn btn-header-ghost btn-sm" id="lang-btn" title="Switch language">DE</button>
+        <button class="btn btn-header-ghost btn-sm" id="theme-btn" title="Toggle theme">☀️ Light</button>
+        <button class="btn btn-header-ghost btn-sm" id="reset-btn">Reset</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-layout">
+
+    <!-- LEFT: CONFIGURATION PANEL -->
+    <section class="config-panel">
+      <nav class="wizard-nav" aria-label="Setup steps">
+        <button class="wizard-step active" data-tab="family" data-step="0">
+          <div class="ws-bubble"><span class="ws-num">1</span><span class="ws-check">✓</span></div>
+          <span class="ws-label">People</span>
+        </button>
+        <div class="ws-line" id="ws-line-0"></div>
+        <button class="wizard-step" data-tab="cooking" data-step="1">
+          <div class="ws-bubble"><span class="ws-num">2</span><span class="ws-check">✓</span></div>
+          <span class="ws-label">Cooking</span>
+        </button>
+        <div class="ws-line" id="ws-line-1"></div>
+        <button class="wizard-step" data-tab="nutrition" data-step="2">
+          <div class="ws-bubble"><span class="ws-num">3</span><span class="ws-check">✓</span></div>
+          <span class="ws-label">Nutrition</span>
+        </button>
+        <div class="ws-line" id="ws-line-2"></div>
+        <button class="wizard-step" data-tab="variety" data-step="3">
+          <div class="ws-bubble"><span class="ws-num">4</span><span class="ws-check">✓</span></div>
+          <span class="ws-label">Variety</span>
+        </button>
+        <div class="ws-line" id="ws-line-3"></div>
+        <button class="wizard-step" data-tab="restrictions" data-step="4">
+          <div class="ws-bubble"><span class="ws-num">5</span><span class="ws-check">✓</span></div>
+          <span class="ws-label">Limits</span>
+        </button>
+        <div class="ws-line" id="ws-line-4"></div>
+        <button class="wizard-step" data-tab="settings" data-step="5">
+          <div class="ws-bubble ws-bubble--last"><span class="ws-num">✨</span></div>
+          <span class="ws-label">Generate</span>
+        </button>
+      </nav>
+
+      <!-- TAB: PEOPLE -->
+      <div class="tab-panel active" id="tab-family">
+        <h2 class="panel-title">People & Schedule</h2>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="adults-input">Adults</label>
+            <div class="stepper">
+              <button class="stepper-btn" data-target="adults-input" data-dir="-1">−</button>
+              <input type="number" id="adults-input" class="stepper-val" min="1" max="10" value="2">
+              <button class="stepper-btn" data-target="adults-input" data-dir="1">+</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Children</label>
+            <button class="btn btn-outline btn-sm" id="add-child-btn">+ Add child</button>
+          </div>
+        </div>
+
+        <div id="children-list" class="children-list"></div>
+
+        <div class="form-group">
+          <label class="form-label">Meals to plan</label>
+          <div class="radio-group">
+            <label class="radio-card">
+              <input type="checkbox" name="mealType" value="Breakfast"> 🌅 Breakfast
+            </label>
+            <label class="radio-card">
+              <input type="checkbox" name="mealType" value="Lunch"> ☀️ Lunch
+            </label>
+            <label class="radio-card active">
+              <input type="checkbox" name="mealType" value="Dinner" checked> 🌙 Dinner
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Number of days to plan
+            <span class="badge" id="days-badge">5 days</span>
+          </label>
+          <div class="day-selector">
+            <span class="day-label">Mon</span>
+            <span class="day-label">Tue</span>
+            <span class="day-label">Wed</span>
+            <span class="day-label">Thu</span>
+            <span class="day-label">Fri</span>
+            <span class="day-label">Sat</span>
+            <span class="day-label">Sun</span>
+          </div>
+          <input type="range" id="days-slider" min="1" max="7" value="5" class="slider">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Total portions per dish</label>
+          <div class="portions-display" id="portions-display">4 portions</div>
+        </div>
+        <div class="step-footer">
+          <span></span>
+          <button class="btn btn-continue step-next-btn"><span class="i18n-continue">Continue</span> <span class="arrow">→</span></button>
+        </div>
+      </div>
+
+      <!-- TAB: COOKING -->
+      <div class="tab-panel" id="tab-cooking">
+        <h2 class="panel-title">Cooking Preferences</h2>
+
+        <div class="form-group">
+          <label class="form-label">Max. preparation time per dish
+            <span class="badge" id="preptime-badge">30 min</span>
+          </label>
+          <input type="range" id="preptime-slider" min="10" max="90" step="5" value="30" class="slider">
+          <div class="slider-labels">
+            <span>10 min</span>
+            <span>90 min</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Focus areas</label>
+          <div class="checkbox-grid">
+            <label class="check-card">
+              <input type="checkbox" name="focus" value="Health" checked>
+              <span>🥦 Health</span>
+            </label>
+            <label class="check-card">
+              <input type="checkbox" name="focus" value="Longevity" checked>
+              <span>⏳ Longevity</span>
+            </label>
+            <label class="check-card">
+              <input type="checkbox" name="focus" value="Clean Eating" checked>
+              <span>✨ Clean Eating</span>
+            </label>
+            <label class="check-card">
+              <input type="checkbox" name="focus" value="Meal Prep" checked>
+              <span>📦 Meal Prep</span>
+            </label>
+            <label class="check-card">
+              <input type="checkbox" name="focus" value="Seasonal ingredients" checked>
+              <span>🌿 Seasonal</span>
+            </label>
+            <label class="check-card">
+              <input type="checkbox" name="focus" value="Budget-friendly">
+              <span>💰 Budget</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Meal-prep dishes (minimum)</label>
+          <div class="stepper">
+            <button class="stepper-btn" data-target="mealprep-count" data-dir="-1">−</button>
+            <input type="number" id="mealprep-count" class="stepper-val" min="0" max="7" value="2">
+            <button class="stepper-btn" data-target="mealprep-count" data-dir="1">+</button>
+          </div>
+          <p class="form-hint">Dishes that can be prepared in advance and reheated</p>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Cook meal-prep dishes for</label>
+          <div class="stepper">
+            <button class="stepper-btn" data-target="mealprep-days" data-dir="-1">−</button>
+            <input type="number" id="mealprep-days" class="stepper-val" min="1" max="5" value="2">
+            <button class="stepper-btn" data-target="mealprep-days" data-dir="1">+</button>
+          </div>
+          <p class="form-hint">Number of days each meal-prep dish should cover</p>
+        </div>
+        <div class="step-footer">
+          <button class="btn btn-ghost step-prev-btn"><span class="i18n-back">← Back</span></button>
+          <button class="btn btn-continue step-next-btn"><span class="i18n-continue">Continue</span> <span class="arrow">→</span></button>
+        </div>
+      </div>
+
+      <!-- TAB: NUTRITION -->
+      <div class="tab-panel" id="tab-nutrition">
+        <h2 class="panel-title">Nutrition Goals</h2>
+
+        <div class="form-group">
+          <label class="form-label">Protein per portion (grams)
+            <span class="badge" id="protein-badge">30 g</span>
+          </label>
+          <input type="range" id="protein-slider" min="15" max="60" step="5" value="30" class="slider">
+          <div class="slider-labels">
+            <span>15 g</span>
+            <span>60 g</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Plate composition guide</label>
+          <div class="plate-visual" id="plate-visual">
+            <div class="plate-bar-track">
+              <div class="plate-bar-seg seg-veg"   id="seg-veg"></div>
+              <div class="plate-bar-seg seg-carb"  id="seg-carb"></div>
+              <div class="plate-bar-seg seg-rest"  id="seg-rest"></div>
+            </div>
+            <div class="plate-legend">
+              <div class="legend-item"><span class="dot veg"></span> <span id="leg-veg">Vegetables 50%</span></div>
+              <div class="legend-item"><span class="dot carb"></span> <span id="leg-carb">Carbs 25%</span></div>
+              <div class="legend-item"><span class="dot protein"></span> <span id="leg-rest">Protein + Fats 25%</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="veg-ratio">Vegetable portion</label>
+            <select id="veg-ratio" class="select-input">
+              <option value="1/3">⅓ of plate</option>
+              <option value="1/2" selected>½ of plate</option>
+              <option value="2/3">⅔ of plate</option>
+              <option value="3/4">¾ of plate</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="carb-ratio">Carb portion</label>
+            <select id="carb-ratio" class="select-input">
+              <option value="1/5">⅕ of plate</option>
+              <option value="1/4" selected>¼ of plate</option>
+              <option value="1/3">⅓ of plate</option>
+              <option value="1/2">½ of plate</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Include healthy fats</label>
+          <label class="toggle">
+            <input type="checkbox" id="healthy-fats" checked>
+            <span class="toggle-slider"></span>
+            <span class="toggle-label">Yes — include healthy fats (olive oil, avocado, etc.)</span>
+          </label>
+        </div>
+        <div class="step-footer">
+          <button class="btn btn-ghost step-prev-btn"><span class="i18n-back">← Back</span></button>
+          <button class="btn btn-continue step-next-btn"><span class="i18n-continue">Continue</span> <span class="arrow">→</span></button>
+        </div>
+      </div>
+
+      <!-- TAB: VARIETY -->
+      <div class="tab-panel" id="tab-variety">
+        <h2 class="panel-title">Weekly Variety</h2>
+        <p class="panel-desc">Set how many dishes per week should include each food type. The remaining dishes will be vegetarian.</p>
+
+        <div class="variety-grid">
+          <div class="variety-card meat">
+            <div class="variety-icon">🥩</div>
+            <div class="variety-label">Meat dishes</div>
+            <div class="stepper">
+              <button class="stepper-btn" data-target="meat-count" data-dir="-1">−</button>
+              <input type="number" id="meat-count" class="stepper-val" min="0" max="7" value="1">
+              <button class="stepper-btn" data-target="meat-count" data-dir="1">+</button>
+            </div>
+          </div>
+
+          <div class="variety-card fish">
+            <div class="variety-icon">🐟</div>
+            <div class="variety-label">Fish dishes</div>
+            <div class="stepper">
+              <button class="stepper-btn" data-target="fish-count" data-dir="-1">−</button>
+              <input type="number" id="fish-count" class="stepper-val" min="0" max="7" value="1">
+              <button class="stepper-btn" data-target="fish-count" data-dir="1">+</button>
+            </div>
+          </div>
+
+          <div class="variety-card fermented">
+            <div class="variety-icon">🧫</div>
+            <div class="variety-label">Fermented foods</div>
+            <div class="stepper">
+              <button class="stepper-btn" data-target="fermented-count" data-dir="-1">−</button>
+              <input type="number" id="fermented-count" class="stepper-val" min="0" max="7" value="2">
+              <button class="stepper-btn" data-target="fermented-count" data-dir="1">+</button>
+            </div>
+          </div>
+
+          <div class="variety-card veg">
+            <div class="variety-icon">🥬</div>
+            <div class="variety-label">Vegetarian (auto)</div>
+            <div class="variety-auto" id="veg-auto">3 dishes</div>
+          </div>
+        </div>
+        <div class="step-footer">
+          <button class="btn btn-ghost step-prev-btn"><span class="i18n-back">← Back</span></button>
+          <button class="btn btn-continue step-next-btn"><span class="i18n-continue">Continue</span> <span class="arrow">→</span></button>
+        </div>
+      </div>
+
+      <!-- TAB: RESTRICTIONS -->
+      <div class="tab-panel" id="tab-restrictions">
+        <h2 class="panel-title">Dietary Restrictions</h2>
+
+        <div class="form-group">
+          <label class="form-label">Allergies</label>
+          <div class="tag-input-wrapper" id="allergies-wrapper">
+            <div class="tags-display" id="allergies-tags"></div>
+            <input type="text" class="tag-input" id="allergies-input" placeholder="Type and press Enter (e.g. nuts, shellfish)">
+          </div>
+          <p class="form-hint">These ingredients will be strictly excluded</p>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Dislikes / Avoidances</label>
+          <div class="tag-input-wrapper" id="dislikes-wrapper">
+            <div class="tags-display" id="dislikes-tags"></div>
+            <input type="text" class="tag-input" id="dislikes-input" placeholder="Type and press Enter (e.g. liver, pork)">
+          </div>
+          <p class="form-hint">Strongly disliked foods — will be avoided where possible</p>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="extra-notes">Additional notes</label>
+          <textarea id="extra-notes" class="textarea-input" rows="4" placeholder="Any other preferences, cooking equipment limitations, budget constraints, etc."></textarea>
+        </div>
+        <div class="step-footer">
+          <button class="btn btn-ghost step-prev-btn"><span class="i18n-back">← Back</span></button>
+          <button class="btn btn-continue step-next-btn"><span class="i18n-continue">Continue</span> <span class="arrow">→</span></button>
+        </div>
+      </div>
+
+      <!-- TAB: SETTINGS -->
+      <div class="tab-panel" id="tab-settings">
+        <h2 class="panel-title">Generate</h2>
+
+        <div class="form-group">
+          <label class="form-label" for="api-key">Claude API Key</label>
+          <div class="password-wrapper">
+            <input type="password" id="api-key" class="text-input" placeholder="sk-ant-...">
+            <button class="btn-icon" id="toggle-key" title="Show/hide key">👁️</button>
+          </div>
+          <p class="form-hint">Your key is stored locally in your browser and never sent anywhere except Anthropic's API. <a href="https://console.anthropic.com/" target="_blank" rel="noopener">Get your API key →</a></p>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="output-lang">Output language</label>
+          <select id="output-lang" class="select-input">
+            <option value="English">English</option>
+            <option value="German">Deutsch</option>
+            <option value="French">Français</option>
+            <option value="Spanish">Español</option>
+            <option value="Italian">Italiano</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Auto-save preferences</label>
+          <label class="toggle">
+            <input type="checkbox" id="auto-save" checked>
+            <span class="toggle-slider"></span>
+            <span class="toggle-label">Save my settings for future visits</span>
+          </label>
+        </div>
+
+        <div class="settings-info">
+          <h3>About this app</h3>
+          <p>Your meal plan is generated by Claude AI (claude-sonnet-4-6) based on your preferences. Each generation costs approx. 0.01–0.05 USD in API credits.</p>
+        </div>
+
+        <div class="generate-bar">
+          <button class="btn btn-ghost step-prev-btn" id="back-to-restrictions" style="margin-bottom:.75rem"><span class="i18n-back-to-restrictions">← Back to Restrictions</span></button>
+          <button class="btn btn-primary btn-generate" id="generate-btn">
+            <span class="btn-text">✨ Generate My Meal Plan</span>
+            <span class="btn-loader hidden">
+              <span class="spinner"></span> Generating...
+            </span>
+          </button>
+          <div id="error-msg" class="error-msg hidden"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT: RESULTS PANEL -->
+    <section class="results-panel" id="results-panel">
+      <div class="results-empty" id="results-empty">
+        <div class="empty-icon">🍽️</div>
+        <h3>Your meal plan will appear here</h3>
+        <p>Fill in your preferences on the left and click "Generate My Meal Plan"</p>
+        <div class="feature-list">
+          <div class="feature-item">📋 Day-by-day dinner plan</div>
+          <div class="feature-item">🛒 Consolidated shopping list</div>
+          <div class="feature-item">📦 Meal-prep guide</div>
+          <div class="feature-item">📧 Share via email</div>
+        </div>
+      </div>
+
+      <div class="results-content hidden" id="results-content">
+        <div class="results-header">
+          <h2 class="results-title" id="results-title">Your Weekly Meal Plan</h2>
+          <div class="results-actions">
+            <button class="btn btn-outline btn-sm" id="copy-btn" title="Copy to clipboard">📋 Copy</button>
+            <button class="btn btn-outline btn-sm" id="email-btn" title="Share via email">📧 Email</button>
+            <button class="btn btn-outline btn-sm" id="print-btn" title="Print">🖨️ Print</button>
+          </div>
+        </div>
+        <div class="results-body" id="results-body"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- EMAIL MODAL -->
+  <div class="modal-overlay hidden" id="email-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Share via Email</h3>
+        <button class="modal-close" id="modal-close">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label" for="email-address">Your email address</label>
+          <input type="email" id="email-address" class="text-input" placeholder="you@example.com">
+        </div>
+        <p class="form-hint">This will open your email client with the meal plan as the message body.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" id="modal-cancel">Cancel</button>
+        <button class="btn btn-primary" id="modal-send">Open Email Client →</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
