@@ -11,7 +11,7 @@ const state = {
 };
 
 let currentLang  = localStorage.getItem('mp_lang')  || 'en';
-let currentTheme = localStorage.getItem('mp_theme') || 'dark';
+let currentTheme = localStorage.getItem('mp_theme') || 'light';
 
 // ── Translations ───────────────────────────────────────────────
 const T = {
