@@ -89,7 +89,7 @@ const T = {
     // Generate tab
     label_apikey:         'Claude API Key',
     placeholder_apikey:   'sk-ant-...',
-    hint_apikey:          'Your key is stored locally in your browser and never sent anywhere except Anthropic\'s API.',
+    hint_apikey:          'Mealwise relays your key to Anthropic to generate your plan, and never stores or logs it on our server. Your browser may remember it locally so you don\'t have to re-paste it next time.',
     label_lang_output:    'Output language',
     label_autosave:       'Auto-save preferences',
     toggle_autosave:      'Save my settings for future visits',
@@ -197,7 +197,7 @@ const T = {
     // Generate tab
     label_apikey:         'Claude API-Schlüssel',
     placeholder_apikey:   'sk-ant-...',
-    hint_apikey:          'Dein Schlüssel wird lokal gespeichert und nur an die Anthropic-API gesendet.',
+    hint_apikey:          'Mealwise leitet deinen Schlüssel zur Erstellung deines Plans an Anthropic weiter und speichert oder protokolliert ihn nicht auf unserem Server. Dein Browser merkt ihn sich möglicherweise lokal, damit du ihn beim nächsten Mal nicht erneut einfügen musst.',
     label_lang_output:    'Ausgabesprache',
     label_autosave:       'Einstellungen speichern',
     toggle_autosave:      'Einstellungen für zukünftige Besuche speichern',

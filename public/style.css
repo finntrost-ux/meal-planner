@@ -392,7 +392,7 @@ a:hover { color: var(--accent-dark); }
   border-radius: var(--radius-sm);
   background: var(--accent-dim);
   color: var(--accent);
-  border: 1px solid rgba(30,215,96,.2);
+  border: 1px solid rgba(193,97,61,.2);
   transition: var(--trans);
   letter-spacing: .04em;
   text-transform: uppercase;
@@ -537,7 +537,7 @@ input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
   padding: .5rem .9rem;
   background: var(--accent-dim);
   border-radius: var(--radius-sm);
-  border: 1px solid rgba(30,215,96,.2);
+  border: 1px solid rgba(193,97,61,.2);
   display: inline-block;
 }
 
@@ -608,10 +608,10 @@ input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
   transition: var(--trans);
 }
 .variety-card:hover { border-color: rgba(255,255,255,.15); background: var(--surface3); }
-.variety-card.meat   { border-color: rgba(241,81,81,.2); }
-.variety-card.fish   { border-color: rgba(61,155,233,.2); }
-.variety-card.fermented { border-color: rgba(255,148,0,.2); }
-.variety-card.veg    { border-color: rgba(30,215,96,.2); }
+.variety-card.meat   { border-color: rgba(155,58,47,.2); }
+.variety-card.fish   { border-color: rgba(91,124,153,.2); }
+.variety-card.fermented { border-color: rgba(201,138,61,.2); }
+.variety-card.veg    { border-color: rgba(193,97,61,.2); }
 .variety-icon { font-size: 1.6rem; margin-bottom: .4rem; }
 .variety-label { font-size: .72rem; font-weight: 700; color: var(--text3); margin-bottom: .6rem; letter-spacing: .06em; text-transform: uppercase; }
 .variety-card .stepper { justify-content: center; }
@@ -701,7 +701,7 @@ input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
   padding: .65rem .9rem;
   background: var(--red-dim);
   color: var(--red);
-  border: 1px solid rgba(241,81,81,.25);
+  border: 1px solid rgba(155,58,47,.25);
   border-radius: var(--radius-sm);
   font-size: .8rem;
   line-height: 1.5;
