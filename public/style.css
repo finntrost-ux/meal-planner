@@ -74,19 +74,28 @@ a:hover { text-decoration: underline; }
   gap: 1rem;
 }
 .logo { display: flex; align-items: center; gap: .85rem; }
-.logo-icon { font-size: 1.8rem; }
 .logo-title {
   font-size: 1.2rem;
   font-weight: 700;
   line-height: 1.2;
   color: var(--text);
   letter-spacing: -.01em;
+  text-decoration: none;
+}
+.logo-title:hover {
+  color: var(--accent);
+}
+.logo-title:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.header-inner .logo .logo-title {
+  font-family: Georgia, "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
 }
 .logo-sub {
-  font-size: .68rem;
+  font-size: .74rem;
   color: var(--text3);
-  letter-spacing: .06em;
-  text-transform: uppercase;
+  letter-spacing: .01em;
 }
 .header-actions { display: flex; align-items: center; gap: .75rem; }
 .save-indicator {
@@ -979,6 +988,7 @@ input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
   border-bottom-color: var(--border);
 }
 [data-theme="light"] .logo-title { color: var(--text); }
+[data-theme="light"] .logo-title:hover { color: var(--accent); }
 [data-theme="light"] .logo-sub   { color: var(--text3); }
 [data-theme="light"] .btn-header-ghost {
   color: var(--text2);

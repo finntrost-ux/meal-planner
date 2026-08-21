@@ -46,5 +46,5 @@ app.post('/api/generate', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`\n🥗 Meal Planner running at http://localhost:${PORT}\n`);
+  console.log(`\n🥗 Mealwise running at http://localhost:${PORT}\n`);
 });
