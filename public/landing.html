@@ -49,7 +49,7 @@
             <span class="mw-step-num" aria-hidden="true">1</span>
             <span class="mw-visually-hidden">Step 1 of 3.</span>
             <h3 class="mw-step-title">Bring your own API key</h3>
-            <p class="mw-step-desc">Paste your own Anthropic API key &mdash; it&rsquo;s sent straight to Anthropic and never stored on any server.</p>
+            <p class="mw-step-desc">Paste your own Anthropic API key &mdash; Mealwise relays it to Anthropic to generate your plan, and never stores or logs it.</p>
           </div>
           <div class="mw-step">
             <span class="mw-step-num" aria-hidden="true">2</span>
@@ -62,6 +62,37 @@
             <span class="mw-visually-hidden">Step 3 of 3.</span>
             <h3 class="mw-step-title">Get your meal plan</h3>
             <p class="mw-step-desc">A full plan comes back in seconds, laid out day by day and ready to cook from.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="mw-faq" id="faq" aria-labelledby="faq-heading">
+        <p class="mw-eyebrow">FAQ &amp; trust</p>
+        <h2 class="mw-faq-headline" id="faq-heading">Before you paste in a key.</h2>
+        <div class="mw-faq-list">
+          <div class="mw-faq-item">
+            <h3 class="mw-faq-question">What is this?</h3>
+            <p class="mw-faq-answer">Mealwise turns a few lines about what you like to eat into a full week of meals. Paste in your own Anthropic API key, describe your week, and get a plan back &mdash; no account, no sign-up, nothing saved on our end.</p>
+          </div>
+          <div class="mw-faq-item">
+            <h3 class="mw-faq-question">Do I need an API key?</h3>
+            <p class="mw-faq-answer">Yes &mdash; Mealwise doesn&rsquo;t come with its own AI access, so you&rsquo;ll need your own Anthropic API key to generate a plan. If you don&rsquo;t have one yet, you can get one at <a class="mw-faq-link" href="https://console.anthropic.com" target="_blank" rel="noopener noreferrer">console.anthropic.com<span class="mw-visually-hidden"> (opens in a new tab)</span></a>.</p>
+          </div>
+          <div class="mw-faq-item">
+            <h3 class="mw-faq-question">Is my API key stored anywhere?</h3>
+            <p class="mw-faq-answer">Your key is used only to generate your plan &mdash; Mealwise&rsquo;s server relays each request to Anthropic in real time, and never logs or stores it. (Your browser may remember it locally so you don&rsquo;t have to re-paste it next time.)</p>
+          </div>
+          <div class="mw-faq-item">
+            <h3 class="mw-faq-question">Is this free to use?</h3>
+            <p class="mw-faq-answer">Mealwise itself is free &mdash; there&rsquo;s no fee to use the tool. You do pay Anthropic directly for your own API usage, based on their current pricing.</p>
+          </div>
+          <div class="mw-faq-item">
+            <h3 class="mw-faq-question">Which AI model powers this?</h3>
+            <p class="mw-faq-answer">Mealwise is powered by Claude, Anthropic&rsquo;s AI model &mdash; the same one your API key gives you access to.</p>
+          </div>
+          <div class="mw-faq-item">
+            <h3 class="mw-faq-question">What if my API key runs out of credits?</h3>
+            <p class="mw-faq-answer">Generation will fail with an error until you add more. You can top up your credits anytime at <a class="mw-faq-link" href="https://console.anthropic.com" target="_blank" rel="noopener noreferrer">console.anthropic.com<span class="mw-visually-hidden"> (opens in a new tab)</span></a> and try again. (If you see an error right away instead, double-check your key starts with sk-.)</p>
           </div>
         </div>
       </section>

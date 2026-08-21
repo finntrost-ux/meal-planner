@@ -354,7 +354,9 @@ body {
   }
 }
 
-.mw-how-headline {
+/* Shared section-headline style -- "How it works" and "FAQ" headlines */
+.mw-how-headline,
+.mw-faq-headline {
   font-family: var(--mw-font-serif);
   font-weight: 400;
   font-size: 38px;
@@ -376,7 +378,17 @@ body {
   }
 }
 
-.mw-step {
+/* Flat single-column stacked list (FAQ) -- explicitly not a grid, not an accordion */
+.mw-faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mw-card-gap);
+}
+
+/* Shared card surface -- "How it works" step cards and FAQ entries reuse the
+   same visual language on purpose; keep these grouped so they can't drift. */
+.mw-step,
+.mw-faq-item {
   position: relative;
   background: var(--mw-surface-container);
   border-radius: var(--mw-radius-lg);
@@ -411,7 +423,8 @@ body {
   margin-bottom: 20px;
 }
 
-.mw-step-title {
+.mw-step-title,
+.mw-faq-question {
   font-family: var(--mw-font-serif);
   font-weight: 700;
   font-size: 19px;
@@ -420,9 +433,41 @@ body {
   margin-bottom: 10px;
 }
 
-.mw-step-desc {
+.mw-step-desc,
+.mw-faq-answer {
   font-family: var(--mw-font-sans);
   font-size: 14.5px;
   line-height: 1.6;
   color: var(--mw-on-surface-variant);
+}
+
+/* ---------- FAQ / Trust ---------- */
+.mw-faq {
+  padding: 64px var(--mw-margin-mobile) 72px;
+  border-top: 1px solid var(--mw-outline);
+}
+
+@media (min-width: 1024px) {
+  .mw-faq {
+    padding: 88px var(--mw-margin-desktop) 96px;
+  }
+}
+
+.mw-faq-link {
+  color: var(--mw-primary-hover);
+  text-decoration: underline;
+  transition: color 0.15s ease;
+}
+
+.mw-faq-link:hover {
+  color: var(--mw-on-surface);
+}
+
+.mw-faq-link:visited {
+  color: var(--mw-primary-hover);
+}
+
+.mw-faq-link:focus-visible {
+  outline: 3px solid var(--mw-primary);
+  outline-offset: 2px;
 }
