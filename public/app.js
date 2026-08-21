@@ -11,7 +11,6 @@ const state = {
 };
 
 let currentLang  = localStorage.getItem('mp_lang')  || 'en';
-let currentTheme = localStorage.getItem('mp_theme') || 'light';
 
 // ── Translations ───────────────────────────────────────────────
 const T = {
@@ -20,8 +19,6 @@ const T = {
     save_indicator: 'Preferences saved ✓',
     btn_reset:  'Reset',
     btn_lang:   'DE',
-    theme_dark: '☀️ Light',
-    theme_light:'🌙 Dark',
     // Wizard labels
     step_people:     'People',
     step_cooking:    'Cooking',
@@ -130,8 +127,6 @@ const T = {
     save_indicator: 'Einstellungen gespeichert ✓',
     btn_reset:  'Zurücksetzen',
     btn_lang:   'EN',
-    theme_dark: '☀️ Hell',
-    theme_light:'🌙 Dunkel',
     // Wizard labels
     step_people:    'Personen',
     step_cooking:   'Kochen',
@@ -237,23 +232,6 @@ const T = {
   }
 };
 
-// ── Theme ──────────────────────────────────────────────────────
-function initTheme() {
-  applyTheme(currentTheme);
-  document.getElementById('theme-btn').addEventListener('click', () => {
-    currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    localStorage.setItem('mp_theme', currentTheme);
-    applyTheme(currentTheme);
-  });
-}
-
-function applyTheme(theme) {
-  document.documentElement.dataset.theme = theme;
-  const s = T[currentLang];
-  document.getElementById('theme-btn').textContent =
-    theme === 'dark' ? s.theme_dark : s.theme_light;
-}
-
 // ── Language ───────────────────────────────────────────────────
 function initLanguage() {
   applyLanguage(currentLang);
@@ -277,7 +255,6 @@ function applyLanguage(lang) {
   set('#save-indicator', s.save_indicator);
   set('#reset-btn', s.btn_reset);
   set('#lang-btn', s.btn_lang);
-  applyTheme(currentTheme); // re-applies theme button text in new lang
 
   // Wizard step labels
   set('.wizard-step[data-tab="family"]      .ws-label', s.step_people);
@@ -445,7 +422,6 @@ function applyLanguage(lang) {
 
 // ── Boot ──────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-  initTheme();
   initLanguage();
   loadPreferences();
   initStepper();
@@ -1014,8 +990,7 @@ function savePreferences() {
     apiKey: document.getElementById('api-key').value,
     outputLang: document.getElementById('output-lang').value,
     autoSave: document.getElementById('auto-save').checked,
-    uiLang: currentLang,
-    uiTheme: currentTheme
+    uiLang: currentLang
   };
   localStorage.setItem('mealplanner_prefs', JSON.stringify(prefs));
   flashSaved();
