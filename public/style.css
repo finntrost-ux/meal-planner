@@ -824,6 +824,23 @@ input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
 .results-actions { display: flex; gap: .5rem; flex-wrap: wrap; }
 .results-body { padding: 1.5rem; }
 
+/* Day-cards -- confident structural split of the response into one card
+   per day (see parseDaySections() in app.js). Surface/radius/shadow match
+   the Editorial Warmth card formula already used for .mw-step/.mw-faq-item
+   in landing.css -- no new tokens. */
+.day-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  margin-bottom: 1rem;
+}
+.day-card {
+  background: var(--surface2);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 1.5rem;
+}
+
 /* ─── Meal plan markdown styles ─────────────────────────────── */
 .results-body h1 {
   font-size: 1.3rem;

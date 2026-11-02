@@ -870,6 +870,83 @@ Organized by category:
 Please respond in **${p.lang}**. Keep the output clear, compact, and practical.`;
 }
 
+// ── Day-section parsing (structural, language-agnostic) ───────
+// Splits the response markdown into day-candidate sections ahead of the
+// shopping-list boundary. Detects headings structurally (markdown `#`/`##`/
+// `###` lines, or a bolded line standing alone as a pseudo-heading) rather
+// than matching literal weekday names, since the response's output
+// language follows prefs.lang (German/French/Spanish/Italian), not the
+// prompt's internal English day names. Returns null when no reliable
+// shopping-list boundary is found; the caller applies the count-based
+// confidence gate against prefs.days.
+function isHeadingLine(line) {
+  return /^#{1,3}\s+\S.*$/.test(line) || /^\*\*[^*\n]+\*\*\s*$/.test(line);
+}
+
+function headingText(line) {
+  return line
+    .replace(/^#{1,3}\s+/, '')
+    .replace(/^\*\*([^*\n]+)\*\*\s*$/, '$1')
+    .trim();
+}
+
+function parseDaySections(markdown) {
+  const lines = markdown.split('\n');
+
+  // Locate the shopping-list boundary: an HR line immediately followed
+  // (skipping blank lines) by a heading-level line that mentions
+  // "shopping" or carries the 🛒 emoji -- the emoji check keeps this
+  // working regardless of the selected output language.
+  let boundaryIndex = -1;
+  for (let i = 0; i < lines.length; i++) {
+    if (!/^\s*-{3,}\s*$/.test(lines[i])) continue;
+    let j = i + 1;
+    while (j < lines.length && lines[j].trim() === '') j++;
+    if (j >= lines.length) continue;
+    const candidate = lines[j];
+    if (isHeadingLine(candidate) && (/shopping/i.test(candidate) || candidate.includes('🛒'))) {
+      boundaryIndex = i;
+      break;
+    }
+  }
+  if (boundaryIndex === -1) return null;
+
+  const dayLines = lines.slice(0, boundaryIndex);
+  const shoppingMarkdown = lines.slice(boundaryIndex).join('\n').trim();
+
+  // Prefer real markdown headings (`#`/`##`/`###`) as the day-split points.
+  // Only fall back to bold-standalone-line "pseudo-headings" when the
+  // response uses no `#` headings at all -- otherwise a day's own bolded
+  // sub-labels (e.g. a standalone "**Preparation steps**" line, from the
+  // prompt's numbered Output Format) would be misread as extra day
+  // boundaries and corrupt the section count.
+  const hashHeadingIdxs = [];
+  const boldHeadingIdxs = [];
+  dayLines.forEach((line, i) => {
+    if (/^#{1,3}\s+\S.*$/.test(line)) hashHeadingIdxs.push(i);
+    else if (/^\*\*[^*\n]+\*\*\s*$/.test(line)) boldHeadingIdxs.push(i);
+  });
+  const headingLineIdxs = hashHeadingIdxs.length > 0 ? hashHeadingIdxs : boldHeadingIdxs;
+  if (headingLineIdxs.length === 0) return null;
+
+  const daySections = headingLineIdxs.map((startIdx, i) => {
+    const endIdx = i + 1 < headingLineIdxs.length ? headingLineIdxs[i + 1] : dayLines.length;
+    return {
+      heading: headingText(dayLines[startIdx]),
+      markdown: dayLines.slice(startIdx, endIdx).join('\n').trim()
+    };
+  });
+
+  // Fold any leading preamble (text before the first heading, e.g. an
+  // intro sentence) into the first day's card so nothing is dropped.
+  if (headingLineIdxs[0] > 0) {
+    const preamble = dayLines.slice(0, headingLineIdxs[0]).join('\n').trim();
+    if (preamble) daySections[0].markdown = `${preamble}\n\n${daySections[0].markdown}`;
+  }
+
+  return { daySections, shoppingMarkdown };
+}
+
 // ── Render results ────────────────────────────────────────────
 function renderResults(markdown, prefs) {
   const mealsStr = prefs.mealTypes.join(' · ');
@@ -879,7 +956,23 @@ function renderResults(markdown, prefs) {
     `Your ${days}-Day Plan — ${mealsStr}`;
 
   const body = document.getElementById('results-body');
-  body.innerHTML = simpleMarkdown(markdown);
+  const parsed = parseDaySections(markdown);
+
+  if (parsed && parsed.daySections.length === prefs.days) {
+    // Confident structural split: one card per day, each rendered via the
+    // existing simpleMarkdown() converter. The shopping-list section (if
+    // any) renders after the cards via the same converter, unchanged.
+    const cardsHtml = parsed.daySections
+      .map(section => `<article class="day-card">${simpleMarkdown(section.markdown)}</article>`)
+      .join('');
+    const shoppingHtml = parsed.shoppingMarkdown ? simpleMarkdown(parsed.shoppingMarkdown) : '';
+    body.innerHTML = `<div class="day-cards">${cardsHtml}</div>${shoppingHtml}`;
+  } else {
+    // Not confident the response splits cleanly into exactly prefs.days
+    // sections (or no shopping-list boundary found) -- fall back to
+    // today's exact single-block rendering rather than guess.
+    body.innerHTML = simpleMarkdown(markdown);
+  }
 
   document.getElementById('results-empty').classList.add('hidden');
   document.getElementById('results-content').classList.remove('hidden');
